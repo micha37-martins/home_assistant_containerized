@@ -1,0 +1,58 @@
+---
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:2021.12.10"
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    # should run on the network of its host
+    network_mode: host
+    # port 5683 is for Shelly CoIoT
+    ports:
+      - "8123:8123"
+      - "5683:5683/udp"
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.14
+    user: mosquitto
+    container_name: mqtt
+    restart: always
+      #    environment:
+      #      MQTT_USER: ${MQTT_USER}
+      #      MQTT_PASS: ${MQTT_PASS}
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
+        reservations:
+          memory: 16M
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    build:
+      context: ./zigbee2mqtt
+      args:
+        - MQTT_USER
+        - MQTT_PASS
+    volumes:
+      - ./zigbee2mqtt/data:/app/data
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    environment:
+      - TZ=Europe/Berlin
+      - MQTT_USER=${MQTT_USER}
+      - MQTT_PASS=${MQTT_PASS}

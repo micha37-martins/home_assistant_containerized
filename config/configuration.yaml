@@ -1,0 +1,119 @@
+####################################################
+#                                                  #
+#                Default Config                    #
+#                                                  #
+####################################################
+# https://www.home-assistant.io/integrations/default_config/
+# Configure a default setup of Home Assistant (frontend, api, etc)
+# Split config:
+# https://www.home-assistant.io/docs/configuration/splitting_configuration/
+# Example:
+# https://github.com/DubhAd/Home-AssistantConfig
+---
+person:
+updater:
+zone:
+zeroconf:
+system_health:
+sun:
+ssdp:
+map:
+logbook:
+config:
+history:
+logger:
+  default: info
+
+homeassistant:
+  packages:
+    zigbee2mqtt: !include zigbee2mqtt.yaml
+
+# TELEGRAM
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_bot_apikey
+    allowed_chat_ids:
+      - !secret telegram_user_id_01
+      - !secret telegram_user_id_02
+
+notify:
+  - platform: telegram
+    name: telegram_01
+    chat_id: !secret telegram_user_id_01
+
+  - platform: telegram
+    name: telegram_02
+    chat_id: !secret telegram_user_id_02
+
+####################################################
+#                                                  #
+#                  Scripts                         #
+#                                                  #
+####################################################
+# https://www.home-assistant.io/integrations/script/
+alert: !include_dir_named alerts/
+script: !include scripts.yaml
+sensor: !include sensors.yaml
+
+###############
+# Sensor info general:
+# Also, keep in mind that sensors and binary_sensors are NOT mixable
+# (have a separate:
+# sensor: !include sensors.yaml
+# binary_sensor: !include binary_sensors.yaml
+
+switch:
+  - platform: "mqtt"
+    name: OSRAM-Dose-01
+    state_topic: "zigbee2mqtt/stehlampe"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    brightness: true
+    schema: "json"
+    command_topic: "zigbee2mqtt/stehlampe/set"
+
+switch:
+  - platform: mqtt
+    name: "osram-dose-01"
+    icon: mdi:switch
+    payload_on: "ON"
+    payload_off: "OFF"
+    state_topic: "zigbee2mqtt/osram-dose-01/get"
+    state_on: "ON"
+    state_off: "OFF"
+    command_topic: "zigbee2mqtt/osram-dose-01/set"
+    qos: 1
+
+# 0xec1bbdfffeaea623
+switch:
+  - platform: mqtt
+    name: "IKEA-sw-01"
+    icon: mdi:switch
+    payload_on: "on"
+    payload_off: "off"
+    state_topic: "zigbee2mqtt/IKEA_sw_01/get"
+    state_on: "on"
+    state_off: "off"
+    command_topic: "zigbee2mqtt/IKEA_sw_01/set"
+    qos: 0
+
+# Trodfri dimmable IKEA_blb_1000_az01
+light:
+  - platform: mqtt
+    name: "IKEAlampAZ01"
+    state_topic: "zigbee2mqtt/IKEA_blb_1000_az01"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    brightness: true
+    color_temp: false
+    schema: json
+    command_topic: "zigbee2mqtt/IKEA_blb_1000_az01/set"
+
+# Trodfri dimmable IKEA_blb_1000_az02
+light:
+  - platform: mqtt
+    name: "IKEAlampAZ02"
+    state_topic: "zigbee2mqtt/IKEA_blb_1000_az02"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    brightness: true
+    color_temp: false
+    schema: json
+    command_topic: "zigbee2mqtt/IKEA_blb_1000_az02/set"

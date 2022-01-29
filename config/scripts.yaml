@@ -1,0 +1,6 @@
+# - platform: template
+#    sensors:
+#      temperature_home:
+#        friendly_name: "met.no temperature outside"
+#        unit_of_measurement: '°C'
+#        value_template: "{{ state_attr('weather.home', 'temperature') }}"

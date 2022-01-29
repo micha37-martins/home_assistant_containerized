@@ -1,0 +1,88 @@
+- platform: template
+  sensors:
+    weather_temp_outside:
+      friendly_name: "temp_outside"
+      unit_of_measurement: "°C"
+      value_template: "{{ state_attr('weather.home', 'temperature') }}"
+
+- platform: template
+  sensors:
+    windspeed_kmh:
+      friendly_name: "Windspeed"
+      unit_of_measurement: "km/h"
+      value_template: "{{ states('sensor.openweathermap_wind_speed') | float * 3.6 | round(0) }}"
+
+- platform: template
+  sensors:
+    weather_humidity_outside:
+      friendly_name: "humidity_outside"
+      unit_of_measurement: "%"
+      device_class: "humidity"
+      value_template: "{{ state_attr('weather.home', 'humidity') }}"
+
+
+- platform: template
+  sensors:
+    mold_indicator_dewpoint:
+      friendly_name: "dewpoint inside"
+      unit_of_measurement: ""
+      device_class: "humidity"
+      value_template: "{{ (state_attr('sensor.mold_indicator', 'dewpoint')) }}"
+
+- platform: mold_indicator
+  indoor_temp_sensor: sensor.shelly_ht_01_temperature
+  indoor_humidity_sensor: sensor.shelly_ht_01_humidity
+  outdoor_temp_sensor: sensor.weather_temp_outside
+  calibration_factor: 2.0
+
+# Source: https://community.home-assistant.io/t/calculations-for-dew-point/5145/14
+# Post 12/21
+- platform: template
+  sensors:
+    dewpoint_weather:
+      unit_of_measurement: ""
+      friendly_name: "Dew Point outside"
+      device_class: "humidity"
+      value_template: >-
+        {{ ((states('sensor.weather_temp_outside') | float(0)) - ((100 - states('sensor.weather_humidity_outside') | int(0)) /5)) }}
+
+- platform: template
+  sensors:
+    dewpoint_01:
+      unit_of_measurement: ""
+      friendly_name: "Dew Point-01 inside"
+      device_class: "humidity"
+      value_template: >-
+        {{ ((states('sensor.shelly_ht_01_temperature') | float(0)) - ((100 - states('sensor.shelly_ht_01_humidity') | int(0)) /5)) }}
+
+# Absolute humidity
+- platform: template
+  sensors:
+    absolute_humidity_out:
+      friendly_name: "Outside Absolute Humidity"
+      unit_of_measurement: 'g/m^3'
+      device_class: "humidity"
+      value_template: >
+        {% set cur_temp = states('sensor.weather_temp_outside') | float(0) %}
+        {% set cur_humidity = states('sensor.weather_humidity_outside') | float(0) %}
+        {{ ((e ** ((17.67 * cur_temp) / (243.5 + cur_temp )) * 6.112 * cur_humidity * 2.1674 ) / (273.15 + cur_temp)) | round(1) }}
+- platform: template
+  sensors:
+    absolute_humidity_in:
+      friendly_name: "Inside Absolute Humidity"
+      unit_of_measurement: 'g/m^3'
+      device_class: "humidity"
+      value_template: >
+        {% set cur_temp = states('sensor.shelly_ht_01_temperature') | float(0) %}
+        {% set cur_humidity = states('sensor.shelly_ht_01_humidity') | float(0) %}
+        {{ ((e ** ((17.67 * cur_temp) / (243.5 + cur_temp )) * 6.112 * cur_humidity * 2.1674 ) / (273.15 + cur_temp)) | round(1) }}
+
+
+- platform: template
+  sensors:
+    abs_hum_diff:
+      unit_of_measurement: "g/m^3"
+      friendly_name: "Absolute Humidity Difference"
+      device_class: "humidity"
+      value_template: >-
+        {{ (states('sensor.absolute_humidity_in') | float(0)) - (states('sensor.absolute_humidity_out') | float(0)) | round(1) }}
