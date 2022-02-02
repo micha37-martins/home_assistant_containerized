@@ -2,11 +2,14 @@
 # https://community.home-assistant.io/t/sharing-your-configuration-on-github/195144
 # * ensures that everything will be ignored.
 *
-# Allow-listed files/folders
-!config/
+# Allowed files
 !*.yaml
 !.gitignore
 !*.md
+# Allowed folders
+!config/
+!zigbee2mqtt/
+!zigbee2mqtt/data/
 
 # Ignore folders.
 .storage
@@ -20,4 +23,3 @@ known_devices.yaml
 
 .env
 mosquitto/
-zigbee2mqtt/
