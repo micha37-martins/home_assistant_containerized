@@ -9,7 +9,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     privileged: true
-    # should run on the network of its host
+    # ha should run on the network of its host
     network_mode: host
     # port 5683 is for Shelly CoIoT
     ports:
@@ -21,38 +21,34 @@ services:
     user: mosquitto
     container_name: mqtt
     restart: always
-      #    environment:
-      #      MQTT_USER: ${MQTT_USER}
-      #      MQTT_PASS: ${MQTT_PASS}
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
     ports:
-      - "1883:1883"
+      - "${MQTT_PORT}:${MQTT_PORT}"
 
   zigbee2mqtt:
     container_name: zigbee2mqtt
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 64M
-        reservations:
-          memory: 16M
-      restart_policy:
-        condition: on-failure
-        max_attempts: 3
-    build:
-      context: ./zigbee2mqtt
-      args:
-        - MQTT_USER
-        - MQTT_PASS
+    image: koenkk/zigbee2mqtt:1.23.0
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
     volumes:
       - ./zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - "${ZIGBEE_DEVICE}:/dev/ttyACM0"
     environment:
-      - TZ=Europe/Berlin
-      - MQTT_USER=${MQTT_USER}
-      - MQTT_PASS=${MQTT_PASS}
+      - "TZ=${TZ}"
+      - "ZIGBEE2MQTT_CONFIG_HOMEASSISTANT=${ZIGBEE2MQTT_CONFIG_HOMEASSISTANT}"
+      - "ZIGBEE2MQTT_CONFIG_PERMIT_JOIN=${ZIGBEE2MQTT_CONFIG_PERMIT_JOIN}"
+      - "ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC=${ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC}"
+      - "ZIGBEE2MQTT_CONFIG_MQTT_SERVER=${ZIGBEE2MQTT_CONFIG_MQTT_SERVER}"
+      - "ZIGBEE2MQTT_CONFIG_USER=${ZIGBEE2MQTT_CONFIG_USER}"
+      - "ZIGBEE2MQTT_CONFIG_PASSWORD=${ZIGBEE2MQTT_CONFIG_PASSWORD}"
+      - "ZIGBEE2MQTT_CONFIG_INCLUDE_DEVICE_INFORMATION=${ZIGBEE2MQTT_CONFIG_INCLUDE_DEVICE_INFORMATION}"
+      - "ZIGBEE2MQTT_CONFIG_SERIAL_PORT=${ZIGBEE_DEVICE}"
+      - "ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED=${ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED}"
+      - "ZIGBEE2MQTT_CONFIG_QUEUE_DELDAY=${ZIGBEE2MQTT_CONFIG_QUEUE_DELDAY}"
+      - "ZIGBEE2MQTT_CONFIG_QUEUE_SIMULTANEOUSLY=${ZIGBEE2MQTT_CONFIG_QUEUE_SIMULTANEOUSLY}"
