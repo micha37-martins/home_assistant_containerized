@@ -2,10 +2,12 @@
 # https://community.home-assistant.io/t/sharing-your-configuration-on-github/195144
 # * ensures that everything will be ignored.
 *
+# Exept for:
 # Allowed files
 !*.yaml
 !.gitignore
 !*.md
+
 # Allowed folders
 !config/
 !zigbee2mqtt/
@@ -17,9 +19,9 @@
 .google.token
 
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
-ip_bans.yaml
-secrets.yaml
-known_devices.yaml
-
 .env
+ip_bans.yaml
+known_devices.yaml
+secrets.yaml
+
 mosquitto/
