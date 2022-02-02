@@ -41,7 +41,7 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
  $ sudo groupadd --gid 1883 mosquitto
  $ sudo useradd --no-create-home -g mosquitto --uid 1883 mosquitto
  $ sudo usermod -aG mosquitto USERNAME
-
+```
 ### mosquitto (MQTT broker)
 - The mosquitto setup is inspired by [vvatelot mosquitto-docker-compose](https://github.com/vvatelot/mosquitto-docker-compose)
 - mosquitto is used as MQTT broker.
