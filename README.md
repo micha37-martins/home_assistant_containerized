@@ -100,3 +100,13 @@ Allows you to use your Zigbee devices without the vendors bridge/gateway. It act
   the docker-compose.yaml.
 - The setting for zigbee2mqtt can be set in the docker-compose.yaml as env vars
 - TODO: evaluate if empty config have to be created
+
+## TODO
+- zigbee2mqtt frontend
+frontend:
+  port: 8080
+  host: 10.0.24.9
+You should also add the following to the end so a network key is generated:
+
+advanced:
+  network_key: GENERATE

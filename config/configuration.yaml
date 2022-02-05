@@ -1,100 +1,122 @@
-####################################################
-#                                                  #
-#                Default Config                    #
-#                                                  #
-####################################################
-# https://www.home-assistant.io/integrations/default_config/
-# Configure a default setup of Home Assistant (frontend, api, etc)
-# Split config:
-# https://www.home-assistant.io/docs/configuration/splitting_configuration/
-# Example:
-# https://github.com/DubhAd/Home-AssistantConfig
 ---
-person:
-updater:
-zone:
-zeroconf:
-system_health:
-sun:
-ssdp:
-map:
-logbook:
+# setup for vim/neovim
+# https://community.home-assistant.io/t/porting-home-assistant-config-helper-to-neo-vim/121089
+# vim: set filetype=home-assistant :
+# vim: set syntax=yaml :
+
+###############################################################################
+# DEFAULT_CONFIG
+#
+# The default_config integration is a meta-component and configures a default
+# set of integrations for Home Assistant to load.
+# https://www.home-assistant.io/integrations/default_config/
+# default_config:
+#
+# The following list is a subset of default_config. This way only the needed
+# integrations are enabled.
+#
+# Inspired by the following examples:
+# https://github.com/DubhAd/Home-AssistantConfig
+# https://github.com/arsaboo/homeassistant-config/blob/master/configuration.yaml
+###############################################################################
+
+# The config integration is designed to display panels in the frontend to
+# configure and manage parts of Home Assistant.
 config:
+
+# The discovery integration is needed for android and ios app
+discovery:
+
+# The history integration will track everything that is going on within
+# Home Assistant and allows the user to browse through it.
 history:
+
+# The logbook integration shows all the changes that happened to your house in
+# reverse chronological order.
+logbook:
+
+# Needed for android and ios app.
+# https://companion.home-assistant.io/docs/getting_started/
+mobile_app:
+
+# This offers a map on the frontend to display the location of tracked devices.
+map:
+
+# The person integration allows connecting device tracker entities to one or
+# more person entities.
+person:
+
+# The ssdp “Simple Service Discovery Protocol” (part of UPnP) integration will
+# scan the network for supported devices and services.
+ssdp:
+
+# The sun integration will use your current location to track if the sun is
+# above or below the horizon.
+sun:
+
+# The System Health integration provides an API to offer information on the
+# system and its components. It also allows to run diagnostic tools to diagnose
+# problems.
+system_health:
+
+# The updater binary sensor will check daily for new releases of the
+# Home Assistant Core.
+updater:
+
+# The zeroconf integration will scan the network for supported devices and
+# services. Discovered integrations will show up in the discovered section on
+# the integrations page in the configuration panel. It will also make
+# Home Assistant discoverable for other services in the network. Zeroconf is
+# also sometimes known as Bonjour, Rendezvous, and Avahi.
+zeroconf:
+
+# Zones allow you to specify certain regions.
+zone:
+  # This will override the default home zone
+  - name: Home
+    latitude: !secret home_lat
+    longitude: !secret home_long
+    radius: 10
+    icon: mdi:account-multiple
+
+###############################################################################
+# CUSTOM_CONFIG
+# This section includes config that is not in the default_config integration.
+###############################################################################
+
+alert: !include_dir_named alerts/
+
+# The logger integration lets you define the level of logging activities in
+# Home Assistant. (default = warning)
 logger:
   default: info
 
 homeassistant:
   packages:
     zigbee2mqtt: !include zigbee2mqtt.yaml
+  name: Home
+  elevation: !secret home_elevation
+  unit_system: !secret unit_system
+  currency: !secret currency
+  time_zone: !secret time_zone
+  # external_url: !secret external_url
+  internal_url: !secret internal_url
 
-# TELEGRAM
-telegram_bot:
-  - platform: polling
-    api_key: !secret telegram_bot_apikey
-    allowed_chat_ids:
-      - !secret telegram_user_id_01
-      - !secret telegram_user_id_02
+mqtt:
+  broker: localhost
+  port: 1883
+  discovery: true
+  client_id: home-assistant-01
 
-notify:
-  - platform: telegram
-    name: telegram_01
-    chat_id: !secret telegram_user_id_01
+notify: !include_dir_merge_list notify/
 
-  - platform: telegram
-    name: telegram_02
-    chat_id: !secret telegram_user_id_02
-
-####################################################
-#                                                  #
-#                  Scripts                         #
-#                                                  #
-####################################################
-# https://www.home-assistant.io/integrations/script/
-alert: !include_dir_named alerts/
 script: !include scripts.yaml
+
 sensor: !include sensors.yaml
 
-###############
-# Sensor info general:
-# Also, keep in mind that sensors and binary_sensors are NOT mixable
-# (have a separate:
-# sensor: !include sensors.yaml
-# binary_sensor: !include binary_sensors.yaml
+switch: !include switches.yaml
 
-  #switch:
-  #- platform: "mqtt"
-  #  name: OSRAM-Dose-01
-  #  state_topic: "zigbee2mqtt/stehlampe"
-  #  availability_topic: "zigbee2mqtt/bridge/state"
-  #  brightness: true
-  #  schema: "json"
-  #  command_topic: "zigbee2mqtt/stehlampe/set"
-
-switch:
-  - platform: mqtt
-    name: "osram-dose-01"
-    icon: mdi:switch
-    payload_on: "ON"
-    payload_off: "OFF"
-    state_topic: "zigbee2mqtt/osram-dose-01/get"
-    state_on: "ON"
-    state_off: "OFF"
-    command_topic: "zigbee2mqtt/osram-dose-01/set"
-    qos: 1
-
-# 0xec1bbdfffeaea623
-switch:
-  - platform: mqtt
-    name: "IKEA-sw-01"
-    icon: mdi:switch
-    payload_on: "on"
-    payload_off: "off"
-    state_topic: "zigbee2mqtt/IKEA_sw_01/get"
-    state_on: "on"
-    state_off: "off"
-    command_topic: "zigbee2mqtt/IKEA_sw_01/set"
-    qos: 0
+telegram_bot: !include telegram.yaml
 
 # Trodfri dimmable IKEA_blb_1000_az01
 light:
@@ -107,8 +129,7 @@ light:
     schema: json
     command_topic: "zigbee2mqtt/IKEA_blb_1000_az01/set"
 
-# Trodfri dimmable IKEA_blb_1000_az02
-light:
+  # Trodfri dimmable IKEA_blb_1000_az02
   - platform: mqtt
     name: "IKEAlampAZ02"
     state_topic: "zigbee2mqtt/IKEA_blb_1000_az02"
@@ -117,3 +138,5 @@ light:
     color_temp: false
     schema: json
     command_topic: "zigbee2mqtt/IKEA_blb_1000_az02/set"
+
+cover: !include covers.yaml

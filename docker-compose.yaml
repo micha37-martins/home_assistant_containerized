@@ -3,13 +3,13 @@ version: '3'
 services:
   homeassistant:
     container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:2021.12.10"
+    image: "ghcr.io/home-assistant/home-assistant:2022.2.5"
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     privileged: true
-    # ha should run on the network of its host
+    # should run on the network of its host
     network_mode: host
     # port 5683 is for Shelly CoIoT
     ports:
@@ -41,7 +41,6 @@ services:
       - "${ZIGBEE_DEVICE}:/dev/ttyACM0"
     environment:
       - "TZ=${TZ}"
-      - "ZIGBEE2MQTT_CONFIG_DEVICES=devices.yaml"
       - "ZIGBEE2MQTT_CONFIG_HOMEASSISTANT=${ZIGBEE2MQTT_CONFIG_HOMEASSISTANT}"
       - "ZIGBEE2MQTT_CONFIG_PERMIT_JOIN=${ZIGBEE2MQTT_CONFIG_PERMIT_JOIN}"
       - "ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC=${ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC}"
@@ -53,3 +52,5 @@ services:
       - "ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED=${ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED}"
       - "ZIGBEE2MQTT_CONFIG_QUEUE_DELDAY=${ZIGBEE2MQTT_CONFIG_QUEUE_DELDAY}"
       - "ZIGBEE2MQTT_CONFIG_QUEUE_SIMULTANEOUSLY=${ZIGBEE2MQTT_CONFIG_QUEUE_SIMULTANEOUSLY}"
+    ports:
+      - "8080:8080"
