@@ -62,14 +62,14 @@ sensor: !include sensors.yaml
 # sensor: !include sensors.yaml
 # binary_sensor: !include binary_sensors.yaml
 
-switch:
-  - platform: "mqtt"
-    name: OSRAM-Dose-01
-    state_topic: "zigbee2mqtt/stehlampe"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    brightness: true
-    schema: "json"
-    command_topic: "zigbee2mqtt/stehlampe/set"
+  #switch:
+  #- platform: "mqtt"
+  #  name: OSRAM-Dose-01
+  #  state_topic: "zigbee2mqtt/stehlampe"
+  #  availability_topic: "zigbee2mqtt/bridge/state"
+  #  brightness: true
+  #  schema: "json"
+  #  command_topic: "zigbee2mqtt/stehlampe/set"
 
 switch:
   - platform: mqtt
