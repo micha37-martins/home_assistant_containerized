@@ -44,7 +44,7 @@ script:
 timer:
   zigbee_permit_join:
     name: Time remaining
-    duration: 300
+    duration: 240
 
 sensor:
   # Sensor for monitoring the bridge state
@@ -55,13 +55,13 @@ sensor:
   # Sensor for Showing the Zigbee2mqtt Version
   - platform: mqtt
     name: Zigbee2mqtt Version
-    state_topic: "zigbee2mqtt/bridge/info"
+    state_topic: "zigbee2mqtt/bridge/config"
     value_template: "{{ value_json.version }}"
     icon: mdi:zigbee
   # Sensor for Showing the Coordinator Version
   - platform: mqtt
     name: Coordinator Version
-    state_topic: "zigbee2mqtt/bridge/info"
+    state_topic: "zigbee2mqtt/bridge/config"
     value_template: "{{ value_json.coordinator }}"
     icon: mdi:chip
 

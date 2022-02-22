@@ -1,0 +1,19 @@
+- id: '1645169569797'
+  alias: Controller - IKEA E1743 TRÅDFRI On/Off OSRAM 01
+  description: controls osram smartplug 01
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: Zigbee2MQTT
+      controller_entity: sensor.0xec1bbdfffeaea623_click
+      helper_last_controller_event: input_text.helper_last_controller_event_ikea_osram_01
+      action_button_up_short:
+      - type: turn_on
+        device_id: bf4821072070914927c060e2b9cd5865
+        entity_id: switch.0x7cb03eaa0a02ddb9
+        domain: switch
+      action_button_down_short:
+      - type: turn_off
+        device_id: bf4821072070914927c060e2b9cd5865
+        entity_id: switch.0x7cb03eaa0a02ddb9
+        domain: switch

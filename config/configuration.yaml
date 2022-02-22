@@ -20,6 +20,11 @@
 # https://github.com/arsaboo/homeassistant-config/blob/master/configuration.yaml
 ###############################################################################
 
+# Automations in Home Assistant allow you to automatically respond to things
+# that happen. You can turn the lights on at sunset or pause the music when you
+# receive a call.
+automation: !include automations.yaml
+
 # The config integration is designed to display panels in the frontend to
 # configure and manage parts of Home Assistant.
 config:
@@ -41,6 +46,9 @@ mobile_app:
 
 # This offers a map on the frontend to display the location of tracked devices.
 map:
+
+# This integration handles redirects from the My Home Assistant service.
+my:
 
 # The person integration allows connecting device tracker entities to one or
 # more person entities.
@@ -114,9 +122,14 @@ script: !include scripts.yaml
 
 sensor: !include sensors.yaml
 
+# The shopping_list integration allows you to keep track of shopping list items.
+shopping_list:
+
 switch: !include switches.yaml
 
 telegram_bot: !include telegram.yaml
+
+xiaomi_miio:
 
 # Trodfri dimmable IKEA_blb_1000_az01
 light:
