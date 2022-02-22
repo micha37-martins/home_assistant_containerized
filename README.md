@@ -47,13 +47,20 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
 ```bash
   $ docker-compose up -d mosquitto
 ```
-- And substitute <USERNAME> <PASSWORD> to generate an according entry in 
+- And substitute "<USERNAME>" "<PASSWORD>" to generate an according entry in 
   mosquitto/config/password.txt
 ```bash
   $ docker-compose exec mosquitto mosquitto_passwd \
     -b /mosquitto/config/password.txt <USERNAME> <PASSWORD>
-  4 docker-compose restart
+  $ docker-compose restart
 ```
+- The same command can be used to update a password.
+
+> **_NOTE:_ mosquitto__passwd__ _-b option _should be used with care because the
+> password _will be visible on the command line and in command history.**
+> [manpage](https://mosquitto.org/man/mosquitto_passwd-1.html)
+
+- Add images to README.md on GitHub - Stack Overflow
 - To test the command install a mosquitto client:
 ```bash
   Arch
