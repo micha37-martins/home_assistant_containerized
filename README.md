@@ -44,7 +44,12 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
 - Config, logs and persistent data is stored in a separate mosquitto/ folder.
 - This setup uses usename and password for authentication.
 >Optionally you could add more security by adding TLS: [Mosquitto TLS](https://mosquitto.org/man/mosquitto-tls-7.html)
-- To set this up run:
+- To allow the mosquitto container access to its files I recommend to give the
+  used user and group access:
+```bash
+  $ sudo chown -R mosquitto/
+```
+- To set up the login run:
 ```bash
   $ docker-compose up -d mosquitto
 ```
@@ -62,7 +67,6 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
 > password will be visible on the command line and in command history.
 > Find more details here: [mosquitto_passwd manpage](https://mosquitto.org/man/mosquitto_passwd-1.html)
 
-- Add images to README.md on GitHub - Stack Overflow
 - To test the command install a mosquitto client:
 ```bash
   Arch
