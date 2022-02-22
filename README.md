@@ -41,13 +41,14 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
 ### mosquitto (MQTT broker)
 - The mosquitto setup is inspired by [vvatelot mosquitto-docker-compose](https://github.com/vvatelot/mosquitto-docker-compose)
 - mosquitto is used as MQTT broker.
-- Config, log and persistent data is stored in a separate mosquitto/ folder.
+- Config, logs and persistent data is stored in a separate mosquitto/ folder.
 - This setup uses usename and password for authentication.
+>Optionally you could add more security by adding TLS: [Mosquitto TLS](https://mosquitto.org/man/mosquitto-tls-7.html)
 - To set this up run:
 ```bash
   $ docker-compose up -d mosquitto
 ```
-- And substitute "<USERNAME>" "<PASSWORD>" to generate an according entry in 
+- And substitute "\<USERNAME\>" "\<PASSWORD\>" to generate an according entry in 
   mosquitto/config/password.txt
 ```bash
   $ docker-compose exec mosquitto mosquitto_passwd \
