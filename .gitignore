@@ -11,7 +11,7 @@
 # Allowed folders
 !config/
 !zigbee2mqtt/
-!zigbee2mqtt/data/
+!mosquitto/
 
 # Ignore folders.
 .storage
@@ -23,5 +23,3 @@
 ip_bans.yaml
 known_devices.yaml
 secrets.yaml
-
-mosquitto/
