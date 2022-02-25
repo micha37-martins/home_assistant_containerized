@@ -6,9 +6,8 @@
      alt="mosquitto logo"
      width="200" />
 
-# Home Assistant Docker
+# Home Assistant Containerized
 Home Asisstant containerized with docker-compose
-
 
 ## Goal of this project
 This project aims for easy setup and maintainability.
@@ -105,21 +104,23 @@ Allows you to use your Zigbee devices without the vendors bridge/gateway. It act
 #### Prerequisites
 - At first you need to have a supported Zigbee Adapter:
   - https://www.zigbee2mqtt.io/guide/supported-hardware.html
+  - I started with a CC2531 and upgraded to SONOFF Zigbee 3.0 USB Dongle Plus
 - Then you find the location of the device:
   - https://www.zigbee2mqtt.io/guide/installation/01_linux.html#determine-location-of-the-adapter-and-checking-user-permissions
 
 #### Setup
-- We will not use the frontend provided by zigbee2mqtt so no port is exposed in 
-  the docker-compose.yaml.
 - The setting for zigbee2mqtt can be set in the docker-compose.yaml as env vars
-- TODO: evaluate if empty config have to be created
+- A basic config is in the zigbee2mqtt folder
+- The documentation provides a lot of further possibilities [docu](https://www.zigbee2mqtt.io/guide/configuration/)
+- To improve security it is highly recommended to use a custom network key. Because
+  the default key is well known. [set custom network key:](https://www.zigbee2mqtt.io/guide/configuration/zigbee-network.html#network-config)
 
-## TODO
-- zigbee2mqtt frontend
-frontend:
-  port: 8080
-  host: 10.0.24.9
-You should also add the following to the end so a network key is generated:
+#### Troubleshooting
+> A change of zigbee2mqtt config file or docker-compose env variables does not
+> get applied:
+After the config of zigbee2mqtt changed do docker compose down (not just restart)
 
-advanced:
-  network_key: GENERATE
+> I changed the network_key but get an error of an already existing pan_id!
+This is annoying but you have 2 options:
+- 1. Try to reduce! the range of your zigbee device (remove antenna) and try again
+- 2. Change the pan_id in the config

@@ -4,7 +4,7 @@
   covers:
     garage_front_door:
       device_class: garage
-      friendly_name: "Garage Rolltor"
+      friendly_name: "Garage front"
       value_template: >-
         {% if is_state('binary_sensor.shelly_dw_garage_01_door','on') %}
           Open
@@ -34,7 +34,7 @@
   covers:
     garage_back_door:
       device_class: garage
-      friendly_name: "Garage Schwingtor"
+      friendly_name: "Garage rear"
       value_template: >-
         {% if is_state('binary_sensor.shelly_dw_garage_02_door','on') %}
           Open

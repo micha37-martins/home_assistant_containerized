@@ -111,7 +111,9 @@ homeassistant:
   internal_url: !secret internal_url
 
 mqtt:
-  broker: localhost
+  broker: mosquitto
+  username: !secret mqtt_username
+  password: !secret mqtt_password
   port: 1883
   discovery: true
   client_id: home-assistant-01
@@ -131,25 +133,6 @@ telegram_bot: !include telegram.yaml
 
 xiaomi_miio:
 
-# Trodfri dimmable IKEA_blb_1000_az01
 light:
-  - platform: mqtt
-    name: "IKEAlampAZ01"
-    state_topic: "zigbee2mqtt/IKEA_blb_1000_az01"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    brightness: true
-    color_temp: false
-    schema: json
-    command_topic: "zigbee2mqtt/IKEA_blb_1000_az01/set"
-
-  # Trodfri dimmable IKEA_blb_1000_az02
-  - platform: mqtt
-    name: "IKEAlampAZ02"
-    state_topic: "zigbee2mqtt/IKEA_blb_1000_az02"
-    availability_topic: "zigbee2mqtt/bridge/state"
-    brightness: true
-    color_temp: false
-    schema: json
-    command_topic: "zigbee2mqtt/IKEA_blb_1000_az02/set"
 
 cover: !include covers.yaml
