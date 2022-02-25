@@ -7,9 +7,11 @@
 !*.yaml
 !.gitignore
 !*.md
+!.env_EXAMPLE
 
 # Allowed folders
 !config/
+!mosquitto/
 !zigbee2mqtt/
 
 # Ignore folders.
