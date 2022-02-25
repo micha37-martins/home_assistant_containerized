@@ -46,7 +46,7 @@ Mosquitto will use UID 1883 as default. You can add a corresponding user to your
 - To allow the mosquitto container access to its files I recommend to give the
   used user and group access:
 ```bash
-  $ sudo chown -R mosquitto/
+  $ sudo chown -R 1883:1883 mosquitto/
 ```
 - To set up the login run:
 ```bash
@@ -118,7 +118,7 @@ Allows you to use your Zigbee devices without the vendors bridge/gateway. It act
 #### Troubleshooting
 > A change of zigbee2mqtt config file or docker-compose env variables does not
 > get applied:
-After the config of zigbee2mqtt changed do docker compose down (not just restart)
+- After the config of zigbee2mqtt changed do docker compose down (not just restart)
 
 > I changed the network_key but get an error of an already existing pan_id!
 This is annoying but you have 2 options:
