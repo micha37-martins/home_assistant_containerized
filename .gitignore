@@ -1,0 +1,26 @@
+# Example .gitignore file from:
+# https://community.home-assistant.io/t/sharing-your-configuration-on-github/195144
+# * ensures that everything will be ignored.
+*
+# Exept for:
+# Allowed files
+!*.yaml
+!.gitignore
+!*.md
+!.env_EXAMPLE
+
+# Allowed folders
+!config/
+!mosquitto/
+!zigbee2mqtt/
+
+# Ignore folders.
+.storage
+.cloud
+.google.token
+
+# Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
+.env
+ip_bans.yaml
+known_devices.yaml
+secrets.yaml

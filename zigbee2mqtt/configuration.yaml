@@ -1,0 +1,13 @@
+device_options:
+  legacy: false
+devices: devices.yaml
+frontend:
+  port: 8080
+homeassistant: true
+mqtt:
+  user: user
+  password: password
+permit_join: false
+serial:
+  port: /dev/YOURDEVICE
+  disable_led: true

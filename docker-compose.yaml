@@ -1,0 +1,50 @@
+---
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:2022.2.5"
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    # Port 5683 is for Shelly CoIoT
+    ports:
+      - "8123:8123"
+      - "5683:5683/udp"
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.14
+    user: mosquitto
+    container_name: mosquitto
+    restart: always
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "${MQTT_PORT}:${MQTT_PORT}"
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:1.23.0
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - "${ZIGBEE_DEVICE}:${ZIGBEE_DEVICE}"
+    environment:
+      - "TZ=${TZ}"
+      - "ZIGBEE2MQTT_CONFIG_MQTT_SERVER=${ZIGBEE2MQTT_CONFIG_MQTT_SERVER}"
+      - "ZIGBEE2MQTT_CONFIG_ADVANCED_NETWORK_KEY=${ZIGBEE2MQTT_CONFIG_ADVANCED_NETWORK_KEY}"
+      - "ZIGBEE2MQTT_CONFIG_ADVANCED_PAN_ID=${ZIGBEE2MQTT_CONFIG_ADVANCED_PAN_ID}"
+      - "ZIGBEE2MQTT_CONFIG_MQTT_USER=${MQTT_USER}"
+      - "ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD=${MQTT_PASSWORD}"
+      - "ZIGBEE2MQTT_CONFIG_SERIAL_PORT=${ZIGBEE_DEVICE}"
+      - "ZIGBEE2MQTT_CONFIG_FRONTEND_PORT=${ZIGBEE2MQTT_FRONTEND_PORT}"
+    ports:
+      - "${ZIGBEE2MQTT_FRONTEND_PORT}:${ZIGBEE2MQTT_FRONTEND_PORT}"
