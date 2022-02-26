@@ -122,3 +122,10 @@ Allows you to use your Zigbee devices without the vendors bridge/gateway. It act
 This is annoying but you have 2 options:
 - 1. Try to reduce! the range of your zigbee device (remove antenna) and try again
 - 2. Change the pan_id in the config
+
+## Home Assistant Configuration
+To use the full potential of HA you can start on the following link and study the given examples:
+https://www.home-assistant.io/docs/configuration/
+
+If you have set up your first devices you may want to do something smart:
+https://community.home-assistant.io/tags/c/blueprints-exchange/53/zigbee2mqtt
