@@ -14,9 +14,7 @@ This project aims for easy setup and maintainability.
 
 As Home Asisstant (HA) offers a lot of possibilities out of the box this project
 focuses on adding functionality that expands connectivity or adds value by
-useful functionality. MQTT and ZigBee allows to connect to IKEA, OSRAM and more
-devices. But having a tool like VS Code inside of HA does not add value to the
-setup. It will clutter the UI instead and similar add-ons will be avoided.
+useful functionality. MQTT and ZigBee allows to connect to [a lot of devices](https://www.zigbee2mqtt.io/supported-devices/).
 
 ## Setup
 ### Secrets
