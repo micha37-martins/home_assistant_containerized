@@ -7,6 +7,7 @@
      width="200" />
 
 # Home Assistant Containerized
+
 Home Asisstant containerized with docker-compose
 
 ## Goal of this project
